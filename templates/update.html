@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="/static/css/tiny-slider.css" rel="stylesheet">
+		<link href="/static/css/style.css" rel="stylesheet">
+		<title>FinRise</title>
+	</head>
+
+<body>
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+        <div class="container">
+            <a class="navbar-brand" href="/">FinRise<span>.</span></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsFurni">
+                <!-- Inside the navigation bar -->
+<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+    <li class="nav-item active" id="homeNavItem">
+        <a class="nav-link" href="/">Home</a>
+    </li>
+    <li class="nav-item" id="inputNavItem">
+        <a class="nav-link" href="/input">Expence entry</a>
+    </li>
+    <li class="nav-item" id="servicesNavItem">
+        <a class="nav-link" href="/update">Expense updation</a>
+    </li>
+    <li class="nav-item" id="contactNavItem">
+        <a class="nav-link" href="/report">Report</a>
+    </li>
+</ul>
+                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                    <!-- Inside the navbar -->
+                    <li id="userContainer"></li>
+                    {% if not session['email'] %}
+                    <li><a class="nav-link" href="#"><img src="/static/images/user.svg"></a></li><!-- Display user icon -->
+                    {% else %}
+                    <li><a class="nav-link" href="#"><i class="fas fa-user"></i> {{ session['email'] }}</a></li> <!-- Display email -->
+                    <li><a class="nav-link" href="/logout">Logout</a></li> <!-- Logout button -->
+                    {% endif %}
+                
+                </ul>
+            </div>
+        </div>
+            
+    </nav>
+    <!-- End Header/Navigation -->
+  <!-- End Header/Navigation -->
+    
+  <div class="container mt-5">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form action="/update" method="post">
+        <div class="form-group">
+            <div class="col-md-4">
+            <label for="month">Month:</label>
+            <select id="month" name="month" class="form-control">
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+        </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+            <label for="year">Year:</label>
+            <select id="year" name="year" class="form-control">
+                <!-- Dynamically generate year options or hard-code them -->
+                {% for year in range(2024, 2034) %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+                </div>
+            <div class="col-12 text-center mt-3">
+                <button type="button" class="btn btn-primary btn-block" id="showExpensesBtn">Show Expenses</button>
+            </div>  
+        </div>
+    
+    <div id="expensesContainer">
+            <div class="container mt-5" >
+                <form action="/update" method="POST">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="expense-label" id="timePeriodDisplay" for="timePeriod">Time Period (in months):</label>
+                            <input type="number" class="form-control" name="timePeriod" id="timePeriod" value="{{ time_period }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="expense-label" id="financialGoalDisplay" for="financialGoal">Financial Goal:</label>
+                            <input type="number" class="form-control" name="financialGoal" id="financialGoal" value="{{ financial_goal}}">
+                        </div>
+                    </div>                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="expense-label" for="income">Income:</label>
+                            <input type="number" class="form-control" name="income" id="income">
+                        </div>
+                    </div>
+                <br>
+              <h2>Expenses</h2>
+              <form action="/input" method="POST">
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="Vacation">Vacation:</label>
+                              <input type="number" class="form-control" name="Vacation" id="Vacation">
+                          </div>
+                          <label for="Vacation-importance">Importance:</label>
+                          <select id="Vacation-importance" name="Vacation-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="daily-transportation">Daily Transportation:</label>
+                              <input type="number" class="form-control" name="daily-transportation" id="daily-transportation">
+                          </div>
+                          <label for="daily-transportation-importance">Importance:</label>
+                          <select id="daily-transportation-importance" name="daily-transportation-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="utilities">Utilities:</label>
+                              <input type="number" class="form-control" name="utilities" id="utilities">
+                          </div>
+                          <label for="utilities-importance">Importance:</label>
+                          <select id="utilities-importance" name="utilities-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="savings">Savings:</label>
+                              <input type="number" class="form-control" name="savings" id="savings">
+                          </div>
+                          <label for="savings-importance">Importance:</label>
+                          <select  id="savings-importance" name="savings-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="housing">Housing:</label>
+                              <input type="number" class="form-control" name="housing" id="housing">
+                          </div>
+                          <label for="housing-importance">Importance:</label>
+                          <select id="housing-importance" name="housing-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="debt-payments">Debt Payments:</label>
+                              <input type="number" class="form-control" name="debt-payments" id="debt-payments">
+                          </div>
+                          <label for="debt-payments-importance">Importance:</label>
+                          <select id="debt-payments-importance" name="debt-payments-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="healthcare">Healthcare:</label>
+                              <input type="number" class="form-control" name="healthcare" id="healthcare">
+                          </div>
+                          <label for="healthcare-importance">Importance:</label>
+                          <select id="healthcare-importance" name="healthcare-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="personal-care">Personal Care:</label>
+                              <input type="number" class="form-control" name="personal-care" id="personal-care">
+                          </div>
+                          <label for="personal-care-importance">Importance:</label>
+                          <select id="personal-care-importance" name="personal-care-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="food">Food:</label>
+                              <input type="number" class="form-control" name="food" id="food">
+                          </div>
+                          <label for="food-importance">Importance:</label>
+                          <select  id="food-importance" name="food-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="insurance">Insurance:</label>
+                              <input type="number" class="form-control" name="insurance" id="insurance">
+                          </div>
+                          <label for="insurance-importance">Importance:</label>
+                          <select id="insurance-importance" name="insurance-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="education">Education:</label>
+                              <input type="number" class="form-control" name="education" id="education">
+                          </div>
+                          <label for="education-importance">Importance:</label>
+                          <select id="education-importance" name="education-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="entertainment">Entertainment:</label>
+                              <input type="number" class="form-control" name="entertainment" id="entertainment">
+                          </div>
+                          <label for="entertainment-importance">Importance:</label>
+                          <select id="entertainment-importance" name="entertainment-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="charity">Charity:</label>
+                              <input type="number" class="form-control" name="charity" id="charity">
+                          </div>
+                          <label for="charity-importance">Importance:</label>
+                          <select id="charity-importance" name="charity-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="taxes">Taxes:</label>
+                              <input type="number" class="form-control" name="taxes" id="taxes">
+                          </div>
+                          <label for="taxes-importance">Importance:</label>
+                          <select id="taxes-importance" name="taxes-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="expense-label" for="miscellaneous">Miscellaneous:</label>
+                              <input type="number" class="form-control" name="miscellaneous" id="miscellaneous">
+                          </div>
+                          <label for="miscellaneous-importance">Importance:</label>
+                          <select id="miscellaneous-importance" name="miscellaneous-importance">
+                              <option value="1">Low</option>
+                              <option value="2">Medium</option>
+                              <option value="3">High</option>
+                          </select><br>
+                      </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary" type="submit">Update</button>
+        </div>
+    </form>
+</div>
+<style>
+    #expensesContainer {
+        display: none; /* Hide the expenses container initially */
+    }
+    </style>
+    
+
+<script>
+    document.getElementById('showExpensesBtn').addEventListener('click', function() {
+    var monthSelect = document.getElementById('month');
+    var month = monthSelect.options[monthSelect.selectedIndex].value;
+    var yearSelect = document.getElementById('year');
+    var year = yearSelect.options[yearSelect.selectedIndex].value;
+
+    if (month !== '' && year !== '') {
+        fetchExpenses(month, year);
+    } else {
+        alert('Please select a month and a year.');
+    }
+});
+
+function fetchExpenses(month, year) {
+    fetch(`/api/values?month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('No expense entry for the month and year');
+        }
+        return response.json();
+    })
+    .then(expenses => {
+        populateExpenses(expenses);
+        document.getElementById('expensesContainer').style.display = 'block'; // Show the expenses container only if fetch is successful
+    })
+    .catch(error => {
+        console.error('Fetch Error:', error);
+        alert('Error fetching data: ' + error.message);
+        document.getElementById('expensesContainer').style.display = 'none'; // Hide the expenses container on error
+    });
+}
+
+function populateExpenses(expenses) {
+    if (!expenses || expenses.length === 0) {
+        alert('No expenses found for the selected month and year.');
+        return;
+    }
+    
+    // Populate each field with values from the expenses object
+    document.getElementById('income').value = expenses.income || 0;
+
+    document.getElementById('Vacation').value = expenses.Vacation || 0;
+    document.getElementById('Vacation-importance').value = expenses.Vacation_importance || 1;
+
+    document.getElementById('daily-transportation').value = expenses.daily_transportation || 0;
+    document.getElementById('daily-transportation-importance').value = expenses.daily_transportation_importance || 1;
+
+    document.getElementById('utilities').value = expenses.utilities || 0;
+    document.getElementById('utilities-importance').value = expenses.utilities_importance || 1;
+
+    document.getElementById('savings').value = expenses.savings || 0;
+    document.getElementById('savings-importance').value = expenses.savings_importance || 1;
+
+    document.getElementById('housing').value = expenses.housing || 0;
+    document.getElementById('housing-importance').value = expenses.housing_importance || 1;
+
+    document.getElementById('debt-payments').value = expenses.debt_payments || 0;
+    document.getElementById('debt-payments-importance').value = expenses.debt_payments_importance || 1;
+
+    document.getElementById('healthcare').value = expenses.healthcare || 0;
+    document.getElementById('healthcare-importance').value = expenses.healthcare_importance || 1;
+
+    document.getElementById('personal-care').value = expenses.personal_care || 0;
+    document.getElementById('personal-care-importance').value = expenses.personal_care_importance || 1;
+
+    document.getElementById('food').value = expenses.food || 0;
+    document.getElementById('food-importance').value = expenses.food_importance || 1;
+
+    document.getElementById('insurance').value = expenses.insurance || 0;
+    document.getElementById('insurance-importance').value = expenses.insurance_importance || 1;
+
+    document.getElementById('education').value = expenses.education || 0;
+    document.getElementById('education-importance').value = expenses.education_importance || 1;
+
+    document.getElementById('entertainment').value = expenses.entertainment || 0;
+    document.getElementById('entertainment-importance').value = expenses.entertainment_importance || 1;
+
+    document.getElementById('charity').value = expenses.charity || 0;
+    document.getElementById('charity-importance').value = expenses.charity_importance || 1;
+
+    document.getElementById('taxes').value = expenses.taxes || 0;
+    document.getElementById('taxes-importance').value = expenses.taxes_importance || 1;
+
+    document.getElementById('miscellaneous').value = expenses.miscellaneous || 0;
+    document.getElementById('miscellaneous-importance').value = expenses.miscellaneous_importance || 1;
+}
+</script>
+    
+
+   
+    <script>
+        // Get the current URL
+        var currentUrl = window.location.pathname;
+    
+        // Get the navigation items
+        var homeNavItem = document.getElementById('homeNavItem');
+        var inputNavItem = document.getElementById('inputNavItem');
+        var servicesNavItem = document.getElementById('servicesNavItem');
+        var contactNavItem = document.getElementById('contactNavItem');
+    
+        // Remove 'active' class from all navigation items
+        homeNavItem.classList.remove('active');
+        inputNavItem.classList.remove('active');
+        servicesNavItem.classList.remove('active');
+        contactNavItem.classList.remove('active');
+    
+        // Add 'active' class to the corresponding navigation item
+        if (currentUrl === '/') {
+            homeNavItem.classList.add('active');
+        } else if (currentUrl === '/input') {
+            inputNavItem.classList.add('active');
+        } else if (currentUrl === '/update') {
+            servicesNavItem.classList.add('active');
+        } else if (currentUrl === '/report') {
+            contactNavItem.classList.add('active');
+        }
+    </script>
+    
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/tiny-slider.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

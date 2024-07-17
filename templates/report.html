@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+  <!-- Bootstrap CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="/static/css/tiny-slider.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+  <title>FinRise</title>
+  <style>
+    #financialReportSection {
+      display: none;
+      margin-top: 23px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    table {
+      width: 101%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 2px; 
+      text-align: left;
+      word-wrap: break-word;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    #chartContainer {
+      margin-top: 20px;
+    }
+
+    .content-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .content-subtitle {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .highlight {
+      color: #007bff;
+    }
+    
+  </style>
+</head>
+
+<body>
+  <!-- Start Header/Navigation -->
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+    <div class="container">
+      <a class="navbar-brand" href="/">FinRise<span>.</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarsFurni">
+        <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+          <li class="nav-item active" id="homeNavItem">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item" id="inputNavItem">
+            <a class="nav-link" href="/input">Expense Entry</a>
+          </li>
+          <li class="nav-item" id="servicesNavItem">
+            <a class="nav-link" href="/update">Expense Updation</a>
+          </li>
+          <li class="nav-item" id="contactNavItem">
+            <a class="nav-link" href="/report">Report</a>
+          </li>
+        </ul>
+
+        <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+          <li id="userContainer"></li>
+          {% if not session['email'] %}
+            <li><a class="nav-link" href="#"><img src="/static/images/user.svg"></a></li><!-- Display user icon -->
+          {% else %}
+            <li><a class="nav-link" href="#"><i class="fas fa-user"></i> {{ session['email'] }}</a></li> <!-- Display email -->
+            <li><a class="nav-link" href="/logout">Logout</a></li> <!-- Logout button -->
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Report</title>
+<body>
+  <div class="container">
+    <form id="reportForm" action="/report" method="post">
+      <div class="form-group">
+        <br>
+        <div class="col-md-4">
+          <label for="month">Month:</label>
+          <select id="monthInput" name="month" class="form-control">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="col-md-4">
+            <label for="year">Year:</label>
+            <select id="yearInput" name="year" class="form-control">
+              {% for year in range(2024, 2034) %}
+                <option value="{{ year }}">{{ year }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-12 text-center mt-3">
+          <button type="button" id="fetchDataButton" class="btn btn-primary btn-block">Show Report</button>
+        </div> 
+      </div>
+    </form>
+    <div id="messageContainer">
+      <div id="noExpensesMessage" style="display:none;" class="alert alert-info">
+        No expenses found for the selected period.
+      </div>
+      <div id="financialReportSection" style="display:none;">
+        <h1 style="text-align: left;">Financial Report</h1>
+        <h2 class="content-subtitle">User Financial Information</h2>
+        <table style="width: 40%;" id="financialInfo">
+          <thead>
+            <tr>
+              <th>Financial Goal</th>
+              <th>Time Period</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ financial_info[0] }}</td>
+              <td>{{ financial_info[1] }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2 class="content-subtitle">Expenses</h2>
+        <table id="expensesData">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Income</th>
+              <th>Vacation</th>
+              <th>Daily Transportation</th>
+              <th>Utilities</th>
+              <th>Savings</th>
+              <th>Housing</th>
+              <th>Debt Payments</th>
+              <th>Healthcare</th>
+              <th>Personal Care</th>
+              <th>Food</th>
+              <th>Insurance</th>
+              <th>Education</th>
+              <th>Entertainment</th>
+              <th>Charity</th>
+              <th>Taxes</th>
+              <th>Miscellaneous</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="expensesRow">
+                <td>{{ expenses_data[0] }}</td>
+                <td>{{ expenses_data[1] }}</td>
+                <td>{{ expenses_data[2] }}</td>
+                <td>{{ expenses_data[3] }}</td>
+                <td>{{ expenses_data[4] }}</td>
+                <td>{{ expenses_data[5] }}</td>
+                <td>{{ expenses_data[6] }}</td>
+                <td>{{ expenses_data[7] }}</td>
+                <td>{{ expenses_data[8] }}</td>
+                <td>{{ expenses_data[9] }}</td>
+                <td>{{ expenses_data[10] }}</td>
+                <td>{{ expenses_data[11] }}</td>
+                <td>{{ expenses_data[12] }}</td>
+                <td>{{ expenses_data[13] }}</td>
+                <td>{{ expenses_data[14] }}</td>
+                <td>{{ expenses_data[15] }}</td>
+                <td>{{ expenses_data[16] }}</td>
+                <td>{{ expenses_data[17] }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <div id="maxCategoryMessage"class="mt-2"></div>
+        <h2><span id="timePeriodReached"></span></h2>
+        <h2>Total amount saved Up to this month:<strong>Rs <strong><span id="totalSavedUpIndex"></span></strong></h2>
+        <h2><span id="remainingMonths"></span></h2>
+        <div id="remainingMessage"class="mt-2"></div>
+        <h2><span id="monthsToGoal"></span></h2>
+        <h2 class="content-subtitle"> <span id="monthsToGoal" class="highlight"></span></h2>
+        <div id="chartContainer" class="text-center mt-5">
+          <canvas id="expensesPieChart" width="400" height="400"></canvas>
+        </div>           
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let myPieChart;
+    
+        function updatePieChart(expensesData) {
+          var ctx = document.getElementById('expensesPieChart').getContext('2d');
+          
+          if (myPieChart) {
+            myPieChart.data.datasets[0].data = expensesData;
+            myPieChart.update();
+          } else {
+            myPieChart = new Chart(ctx, {
+              type: 'pie',
+              data: {
+                labels: ['Vacation', 'Daily Transportation', 'Utilities', 'Savings', 'Housing', 'Debt Payments', 'Healthcare', 'Personal Care', 'Food', 'Insurance', 'Education', 'Entertainment', 'Charity', 'Taxes', 'Miscellaneous'],
+                datasets: [{
+                  data: expensesData, 
+                  backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#8A2BE2',
+                    '#4B0082',
+                    '#7FFF00',
+                    '#00CED1',
+                    '#CD853F',
+                    '#FF4500',
+                    '#6A5ACD',
+                    '#00FF7F',
+                    '#FFD700',
+                    '#FF69B4',
+                    '#8B4513',
+                    '#808080'
+                  ]
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: 'right'
+                  },
+                  tooltip: {
+                    displayColors: false
+                  }
+                }
+              }
+            });
+          }
+        }
+    
+        $(document).ready(function() {
+          $("#fetchDataButton").click(function(e) {
+            e.preventDefault();  
+            var month = $('#monthInput').val();
+            var year = $('#yearInput').val();
+            $.ajax({
+              url: '/report',
+              type: 'POST',
+              data: {
+                month: month,
+                year: year,
+                email: 'user@example.com' 
+              },
+              dataType: 'json',
+              success: function(data) {
+                if (data.expenses_data.length === 0) {
+                  $('#messageContainer').hide();
+                  alert('No expenses found for the selected period.'); 
+                } else {
+                  $('#messageContainer').show(); 
+                  $('#financialReportSection').show(); 
+                  var financialInfoHtml = '<tr><td>' + data.financial_info[0] + '</td><td>' + data.financial_info[1] + '</td></tr>';
+                  $('#financialInfo tbody').html(financialInfoHtml);
+                  $('#expensesData').show(); 
+                  var expensesHtml = '';
+                  data.expenses_data.forEach(function(item) {
+                    expensesHtml += '<tr>';
+                    item.forEach(function(expense) {
+                      expensesHtml += '<td>' + expense + '</td>';
+                    });
+                    expensesHtml += '</tr>';
+                  });
+                  $('#expensesData tbody').html(expensesHtml);
+                  if (data.max_category) {
+                    $('#maxCategoryMessage').html('<h2>Expense category in which the spending can be reduced is ' + data.max_category + '.</h2>');
+                  } else {
+                    $('#maxCategoryMessage').html('<h2>No overspending.</h2>');
+                  }
+                  if (data.remaining > 0) {
+                    $('#remainingMessage').html('<h2><strong>Rs ' + data.remaining + '</strong>'+' remaining to achieve.</h2>');
+                  } else if (data.remaining === 0) {
+                    $('#remainingMessage').html('<h2>Financial goal achieved!</h2>');
+                  } else {
+                    $('#remainingMessage').html('<h2>Financial goal achieved!</h2><h2>Excess savings: Rs ' + (-data.remaining) + '</h2>');
+                  }
+                  if (data.total_saved_up_to_index !== undefined) {
+                    $('#totalSavedUpIndex').text(data.total_saved_up_to_index);
+                  } else {
+                    $('#totalSavedUpIndex').text('Data not available');
+                  }
+    
+                  if (data.months_to_goal < 0) {
+                    $('#monthsToGoal').text("Goal has been achieved.");
+                  } else {
+                    $('#monthsToGoal').html('Approximate Months required to Achieve Financial Goal:<strong>' + parseInt(data.months_to_goal) + ' month(s)');
+                  }
+                  
+                  var timePeriodReached = data.time_period_reached ? "Time period reached" : "Time period not reached";
+                  var remainingMonthsText = data.remaining_months + " month(s) more";
+                  $('#timePeriodReached').html(timePeriodReached + '<strong>'+" (" + remainingMonthsText + ").");
+                  
+                  updatePieChart(data.pie_chart_data);
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error('Error fetching data: ' + error);
+                $('#errorMessage').show().text('Error fetching data: ' + error); 
+              }
+            });
+          });
+        });
+      </script>
+    
+      <script>
+        var currentUrl = window.location.pathname;
+      
+        var homeNavItem = document.getElementById('homeNavItem');
+        var inputNavItem = document.getElementById('inputNavItem');
+        var servicesNavItem = document.getElementById('servicesNavItem');
+        var contactNavItem = document.getElementById('contactNavItem');
+      
+        homeNavItem.classList.remove('active');
+        inputNavItem.classList.remove('active');
+        servicesNavItem.classList.remove('active');
+        contactNavItem.classList.remove('active');
+      
+        if (currentUrl === '/') {
+          homeNavItem.classList.add('active');
+        } else if (currentUrl === '/input') {
+          inputNavItem.classList.add('active');
+        } else if (currentUrl === '/update') {
+          servicesNavItem.classList.add('active');
+        } else if (currentUrl === '/report') {
+          contactNavItem.classList.add('active');
+        }
+      </script>
+      <script src="/static/js/bootstrap.bundle.min.js"></script>
+      <script src="/static/js/tiny-slider.js"></script>
+      <script src="/static/js/custom.js"></script>
+    </body>
+    </html>

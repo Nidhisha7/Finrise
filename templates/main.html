@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+		<!-- Bootstrap CSS -->
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="/static/css/tiny-slider.css" rel="stylesheet">
+		<link href="/static/css/style.css" rel="stylesheet">
+		<title>FinRise</title>
+	</head>
+
+	<body>
+		<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="/">FinRise<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<!-- Inside the navigation bar -->
+<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+    <li class="nav-item active" id="homeNavItem">
+        <a class="nav-link" href="/">Home</a>
+    </li>
+    <li class="nav-item" id="inputNavItem">
+        <a class="nav-link" href="/input">Expence entry</a>
+    </li>
+    <li class="nav-item" id="servicesNavItem">
+        <a class="nav-link" href="/update">Expense updation</a>
+    </li>
+    <li class="nav-item" id="contactNavItem">
+        <a class="nav-link" href="/report">Report</a>
+    </li>
+</ul>
+<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<!-- Inside the navbar -->
+						<li id="userContainer"></li>
+						{% if not session['email'] %}
+						<li><a class="nav-link" href="#"><img src="/static/images/user.svg"></a></li>
+						{% else %}
+						<li><a class="nav-link" href="#"><i class="fas fa-user"></i> {{ session['email'] }}</a></li> 
+						<li><a class="nav-link" href="/logout">Logout</a></li> 
+						{% endif %}
+					
+					</ul>
+				</div>
+			</div>
+				
+		</nav>
+		<!-- End Header/Navigation -->
+		<!-- Start Hero Section -->
+
+		<div class="hero">
+			<div class="container">
+			  <div class="row justify-content-between">
+				<div class="col-lg-5">
+				  <div class="intro-excerpt">
+					<h1>Personal Finance <span clsas="d-block">Management System</span></h1>
+					<p class="mb-4">Adulting? We've got this... Manage your money with confidence and empower your financial future</p>
+							{% if error_message %}
+					<p>{{ error_message }}</p>
+				{% endif %}
+					<a href="/signup" class="btn btn-secondary me-2">Sign Up</a>
+					<a href="/login" class="btn btn-white-outline">Login</a>
+				  </div>
+				</div>
+				<div class="col-lg-7">
+				  <div class="hero-img-wrap">
+					<img src="\static\images\Personal-Finance-Management-App-Development-1536x815-removebg.png" class="img-fluid">
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		<!-- End Hero Section -->
+
+		<!-- Start Section -->
+		<div class="we-help-section">
+			<div class="container">
+				<div class="row justify-content-between">
+					<div class="col-lg-7 mb-5 mb-lg-0">
+						<div class="imgs-grid">
+							<div class="grid grid-1"><img src="\static\images\5d0e1a8ae065f699ce85f60c487e051a.jpg" alt="Finrise.co"></div>
+							<div class="grid grid-2"><img src="\static\images\d407512e9f9f2b1771339f0405a68e7f.jpg" alt="Finrise.co"></div>
+							<div class="grid grid-3"><img src="\static\images\09db79142424708ca8425ee57d7f4dad.jpg" alt="Finrise.co"></div>
+						</div>
+					</div>
+					<div class="col-lg-5 ps-lg-5">
+						<h2 class="section-title mb-4">We Help You Make Better Financial Decisions..</h2>
+						<p>Helps you understand basic financial concepts like budgeting & saving and enables you to set realistic budgets and track expenses.
+						</p>
+						<ul class="list-unstyled custom-list my-4">
+							<li>You can define your financial goals.</li>
+							<li>We give you actionable advices.</li>
+							<li>Helps you meet your financial obligations.</li>
+							<li>Achieve your financial goals.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Section -->
+
+		<!-- Start Section -->
+		<div class="why-choose-section">
+			<div class="container">
+				<div class="row justify-content-between">
+					<div class="col-lg-6">
+						<h2 class="section-title">Why Choose Us</h2>
+						<p> With an emphasis on financial literacy and responsible behavior, this offers a friendly interface and promotes long-term financial wellness.
+						</p>
+
+						<div class="row my-5">
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										 <img src="" alt="" class="imf-fluid"> 
+									</div>
+									<h3>Financial Empowerment</h3>
+									<p> Equip users with the tools and knowledge to manage their money effectively, building confidence and fostering financial independence.</p>
+								</div>
+							</div>
+
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="" alt="" class="imf-fluid">
+									</div>
+									<h3>Improved Financial Health</h3>
+									<p> Equip users with the tools and knowledge to manage their money effectively, building confidence and fostering financial independence.</p>
+								</div>
+							</div>
+
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="" alt="" class="imf-fluid">
+									</div>
+									<h3>Goal Achievement</h3>
+									<p>Help users define and track financial goals, providing features and functionalities to stay on track and motivated.</p>
+								</div>
+							</div>
+
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="" alt="" class="imf-fluid">
+									</div>
+									<h3>Increased Financial Literacy</h3>
+									<p>Educate users on financial concepts and products, fostering informed decision-making when it comes to money management.
+									</p>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-5">
+						<div class="img-wrap">
+							<img src="\static\images\c56ffd5055dbe98ae87eb07d6af8a2c9.jpg" alt="Image" class="img-fluid">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- End Section -->
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+				</div>
+
+
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">FinRise<span>.</span></a></div>
+						<p class="mb-4"></p>
+
+						 
+					</div> 
+
+					<div class="col-lg-8">
+						<div class="row links-wrap">
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="/">Home</a></li>
+									<li><a href="/update">expense updation</a></li>
+									
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="/input">Expense Entry</a></li>
+									<li><a href="/report">Report</a></li>
+									
+								</ul>
+							</div>
+
+							
+						</div>
+					</div>
+
+				</div>
+
+				<div class="border-top copyright">
+					<div class="row pt-4">
+						<div class="col-lg-6">
+							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved.</a>
+            </p>
+						</div>
+
+						<div class="col-lg-6 text-center text-lg-end">
+							<ul class="list-unstyled d-inline-flex ms-auto">
+								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
+
+		<script>
+			// Get the current URL
+			var currentUrl = window.location.pathname;
+		
+			// Get the navigation items
+			var homeNavItem = document.getElementById('homeNavItem');
+			var inputNavItem = document.getElementById('inputNavItem');
+			var servicesNavItem = document.getElementById('servicesNavItem');
+			var contactNavItem = document.getElementById('contactNavItem');
+		
+			// Remove 'active' class from all navigation items
+			homeNavItem.classList.remove('active');
+			inputNavItem.classList.remove('active');
+			servicesNavItem.classList.remove('active');
+			contactNavItem.classList.remove('active');
+		
+			// Add 'active' class to the corresponding navigation item
+			if (currentUrl === '/') {
+				homeNavItem.classList.add('active');
+			} else if (currentUrl === '/input') {
+				inputNavItem.classList.add('active');
+			} else if (currentUrl === '/update') {
+				servicesNavItem.classList.add('active');
+			} else if (currentUrl === '/report') {
+				contactNavItem.classList.add('active');
+			}
+		</script>
+		
+		<script src="/static/js/bootstrap.bundle.min.js"></script>
+		<script src="/static/js/tiny-slider.js"></script>
+		<script src="/static/js/custom.js"></script>
+	</body>
+
+</html>

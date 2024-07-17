@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    
+    <!-- STYLE CSS -->
+    <link rel="stylesheet" href="static/css/style1.css">
+</head>
+
+<body>
+
+    <div class="wrapper" style="background-image: url('/static/images/new.jpeg');">
+        <div class="inner">
+            <form method="POST" action="/signup">
+                <!-- Ensure method="POST" -->
+                <h3>SIGN UP</h3>
+                <div class="form-wrapper">
+                    <label for="Username">Username</label>
+                    <input type="text" class="form-control" id="Username" name="Username" required>
+                    <!-- Add required attribute -->
+                </div>
+                <div class="form-wrapper">
+                    <label for="Email">Email</label>
+                    <input type="email" class="form-control" id="Email" name="Email" required>
+                    <!-- Add required attribute -->
+                </div>
+                <div class="form-wrapper">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="Password" name="Password" required>
+                    <!-- Add required attribute -->
+                </div>
+                <button type="submit">SIGN UP</button>
+                {% if error %}
+                <p>{{ error }}</p>
+                {% endif %}
+            </form>
+            
+        </div>
+    </div>
+    
+</body>
+</html>
