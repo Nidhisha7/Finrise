@@ -1,7 +1,8 @@
-FinRise web application designed to help users track their income and expenses, set financial goals, and monitor their progress towards achieving these goals. 
+**FinRise** 
+Web application designed to help users track their income and expenses, set financial goals, and monitor their progress towards achieving these goals. 
 The application provides a user-friendly interface for inputting and updating financial data, generating detailed reports, and ensuring users remain on track with their financial planning.
 
-Features
+**Features**
 
 User Authentication: Secure user sign-up, login, and logout functionality using bcrypt for password hashing.
 
@@ -16,7 +17,7 @@ Expense Importances: Allows users to specify the importance of each expense cate
 Data Persistence: Utilizes SQLite for storing user data, financial information, and expense records.
 
 
-Technologies Used
+**Technologies**
 
 Flask: Python web framework for building the web application.
 
@@ -29,7 +30,7 @@ HTML/CSS: Frontend for rendering templates.
 JavaScript: For client-side functionality and API interactions.
 
 
-Installation
+**Installation**
 
 1.Clone the repository:
 git clone https://github.com/yourusername/Finrise.git
@@ -37,7 +38,9 @@ cd Finrise
 
 2.Create a virtual environment:
 python3 -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+
+3. Activate the environment
+source venv/bin/activate    #On Windows use `venv\Scripts\activate`
 
 3.Insatll the package required
 python -m pip install <package>
